@@ -65,7 +65,8 @@ if authorized():
             policy_key = f"policy_{policy['policy_id']}"
 
             # Display policy proposal
-            st.html(f"<div style=''>Proposal</div><h4 style='margin: 0; padding: 0'>{policy["proposal"]}</h4>")
+            proposal = policy["proposal"]
+            st.html(f"<div>Proposal</div><h4 style='margin: 0; padding: 0'>{proposal}</h4>")
             # col1, col2 = st.columns([3, 5], gap="large", vertical_alignment="top")
             # with col1:
             #     st.markdown("##### Proposal")
@@ -105,15 +106,16 @@ if authorized():
             # Materials section
             materials = policy.get("materials", [])
             for material in materials:
+                material_title = material["title"]
                 col_title, col_notes = st.columns([3, 5], gap="large", vertical_alignment="center")
                 with col_title:
                     st.markdown(f"##### {material["title"]}")
                     inner_col1, inner_col2, inner_col3 = st.columns([2, 4, 5])
                     with inner_col1:
-                        if st.button("Read", key=f"inspect_{policy_key}_{material['title']}", use_container_width=True):
+                        if st.button("Read", key=f"inspect_{policy_key}_{material_title}", use_container_width=True):
                             show_material_details(material)
                     with inner_col2:
-                        if st.button(":star2: Summarize", key=f"summarize_{policy_key}_{material['title']}", type='primary', use_container_width=True):
+                        if st.button(":star2: Summarize", key=f"summarize_{policy_key}_{material_title}", type='primary', use_container_width=True):
                             st.write("Summary: ...")
                 with col_notes:
-                    st.text_area("Notes", placeholder="Notes", key=f"notes_{policy_key}_{material['title']}", height=100, label_visibility="collapsed")
+                    st.text_area("Notes", placeholder="Notes", key=f"notes_{policy_key}_{material_title}", height=100, label_visibility="collapsed")
