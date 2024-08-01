@@ -51,8 +51,8 @@ authorize()
 
 @st.dialog("Material", width="large")
 def show_material_details(material):
-    st.subheader(f"{material['title']}")
-    st.write(f"{material['content']}")
+    st.subheader(material['title'])
+    st.write(material['content'])
     if st.button("Close"):
         st.rerun()
 
@@ -67,11 +67,6 @@ if authorized():
             # Display policy proposal
             proposal = policy["proposal"]
             st.html(f"<div>Proposal</div><h4 style='margin: 0; padding: 0'>{proposal}</h4>")
-            # col1, col2 = st.columns([3, 5], gap="large", vertical_alignment="top")
-            # with col1:
-            #     st.markdown("##### Proposal")
-            # with col2:
-            #     st.markdown(f"#### {policy["proposal"]}")
 
             st.html("<div style='height: 1em;'></div>")
 
@@ -109,7 +104,7 @@ if authorized():
                 material_title = material["title"]
                 col_title, col_notes = st.columns([3, 5], gap="large", vertical_alignment="center")
                 with col_title:
-                    st.markdown(f"##### {material["title"]}")
+                    st.markdown(f"##### {material_title}")
                     inner_col1, inner_col2, inner_col3 = st.columns([2, 4, 5])
                     with inner_col1:
                         if st.button("Read", key=f"inspect_{policy_key}_{material_title}", use_container_width=True):
