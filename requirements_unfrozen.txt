@@ -6,6 +6,7 @@ streamlit-oauth==0.1.9
 langchain
 langchain_core
 langchain-community
+langchainhub
 langchain-openai
 langchain_anthropic
 openai

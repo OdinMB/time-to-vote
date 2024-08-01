@@ -71,13 +71,13 @@ def conditional_spinner(text, condition):
 
 # --- workaround to display image with link ---
 
-def get_img_with_href(local_img_path, target_url="", width="100%", centered=False, styles=""):
+def get_img_html(local_img_path, target_url="", centered=False, styles=""):
     img_format = os.path.splitext(local_img_path)[-1].replace(".", "")
     bin_str = get_base64_of_bin_file(local_img_path)
     html_code = f"""
-    {'<div style="text-align: center">' if centered else ''}<a href="{target_url}">
-        <img src="data:image/{img_format};base64,{bin_str}" style="width: {width}; {styles}" />
-    </a>{'</div>' if centered else ''}"""
+    {'<div style="text-align: center">' if centered else ''}{'<a href="{target_url}">' if target_url else ''}
+        <img src="data:image/{img_format};base64,{bin_str}" style="{styles}" />
+    {'</a>' if target_url else ''}{'</div>' if centered else ''}"""
     return html_code
 
 def get_base64_of_bin_file(bin_file):
