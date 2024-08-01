@@ -60,7 +60,7 @@ def show_sidebar():
 
     if st.session_state.show_vote:
         proposal = policy["proposal"]
-        st.sidebar.html(f"<hr style='padding-top: 0px; margin-bottom: 2em; margin-top: 0px;'><h3 style='margin: 0 0 1em 0; padding: 0'>{proposal}</h3><div style='text-align: center; font-weight: bold; font-size: 16pt; margin-top: 0em; margin-bottom: 0em; padding: 0px'>Vote</div>")
+        st.sidebar.html(f"<hr style='padding-top: 0px; margin-bottom: 1em; margin-top: 0px;'><div style='text-align: center; font-weight: bold; font-size: 16pt; margin-top: 1em; margin-bottom: 0em; padding: 0px'>Your vote</div><h3 style='margin: 1em 0 1em 0; padding: 0'>{proposal}</h3>")
         col1, col2 = st.sidebar.columns([1, 1], gap="medium", vertical_alignment="top")
         with col1:
             if st.button(":thumbsup:", key=f"support", type='primary', use_container_width=True):
@@ -68,11 +68,19 @@ def show_sidebar():
         with col2:
             if st.button(":thumbsdown:", key=f"oppose", type='primary', use_container_width=True):
                 st.write("Opposing")        
-        st.sidebar.html("<hr style='padding: 0px; margin-top: 1em; margin-bottom: 1em'><div style='height: 0.2em;'></div>")
+        st.sidebar.html("<hr style='padding: 0px; margin-top: 1em; margin-bottom: 0.5em'>")
 
     if st.session_state.show_notes:
         st.sidebar.html("<div style='text-align: center; font-weight: bold; font-size: 16pt; margin-top: 0em; margin-bottom: 0em; padding: 0px'>Notes</div>")
         st.sidebar.text_area("Notes", placeholder="Pros\n\nCons", key=f"notes", height=250, label_visibility="collapsed")
+
+    if st.session_state.get('show_commands', False):
+        if st.sidebar.button(":star2: Identify pros and cons", key=f"proscons", type='primary', use_container_width=True):
+            add_message("human", "Can you identify the pros and cons of the current policy proposal?")
+            st.rerun()
+        if st.sidebar.button(":star2: Recommend vote", key=f"recommendation", type='primary', use_container_width=True):
+            add_message("human", "Based on the available information, what is your recommendation for this policy decision?")
+            st.rerun()
     
 def show_chat():
     messages = st.container(height=600, border=True)
@@ -129,13 +137,3 @@ if authorized():
             # 🌟
             st.html("<div style='text-align: center; font-weight: bold; font-size: 16pt; margin-top: 0em; margin-bottom: 0em; padding: 0px'>Athena</div>")
         show_chat()
-        if st.session_state.get('show_commands', False):
-            col1, col2 = st.columns([1, 1], gap="medium", vertical_alignment="top")
-            with col1:
-                if st.button(":star2: Identify Pros and Cons", key=f"proscons", type='primary', use_container_width=True):
-                    add_message("human", "Can you identify the pros and cons of the current policy proposal?")
-                    st.rerun()
-            with col2:
-                if st.button(":star2: Make recommendation", key=f"recommendation", type='primary', use_container_width=True):
-                    add_message("human", "Based on the available information, what is your recommendation for this policy decision?")
-                    st.rerun()
