@@ -61,7 +61,7 @@ def prologue_sequence():
     messages = [
         ("ai", "Good morning, Senator. I trust you've had your coffee already. We have a pressing matter at hand. In response to yesterday's terrible incident, your party has called for an emergency meeting to improve AI safety.", ""),
         ("ai", "The meeting is scheduled to commence in precisely 4 hours. That's 4 minutes in our accelerated timeline. Allow me to start the countdown for you.", "show_timer"),
-        ("ai", "You're expected to open the discussion on a proposal to regulate autonomous vehicles. The party will be looking to you to either support or oppose the proposal. No pressure, of course.", "show_vote"),
+        ("ai", "You're expected to open the discussion on a proposal to improve cybersecurity for national infrastructure. The party will be looking to you to either support or oppose the proposal. No pressure, of course.", "show_vote"),
         ("ai", "Your research team has compiled a comprehensive set of data and materials. They should provide valuable insights into the matter at hand.", "show_materials"),
         ("ai", "I have access to your notepads and will consider whatever you record there.", "show_notes"),
         ("ai", "As always, I'm at your service, Senator. Shall we dive into the materials?", "show_commands"),

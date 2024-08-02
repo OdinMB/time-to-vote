@@ -4,7 +4,7 @@ from authentication import authorize, authorized
 from utils import get_llm, log_message, get_img_html
 from settings import APP_NAME, FILES_DIR, SCRIPT_DIR, DELIBERATION_TIME
 from game_data import policy
-from chat import initialize_chat_history, add_message, process_message, prologue_sequence
+from chat import initialize_chat_history, add_message, process_message, prologue_sequence, unlock_feature
 
 # set Streamlit session state
 if 'show_timer' not in st.session_state:
@@ -29,12 +29,17 @@ def show_material(material):
     with st.expander(material["icon"] + " " + material["title"]):
         col_image, col_notes = st.columns([2, 3], gap="medium", vertical_alignment="center")
         with col_image:
-            st.html(get_img_html(
-                "img/cover1.jpg", 
-                # width="100px", 
-                centered=True, 
-                styles="height: 200px; margin: 0px; padding: 0px"
-            ))
+            if "image" in material:
+                st.html(
+                    "<div style='border: 1px solid lightgrey; text-align: center; padding: 10px; margin-bottom: 10px; width: 150px; height: 180px;'>" +
+                    get_img_html(
+                        material["image"], 
+                        # width="100px", 
+                        centered=True, 
+                        styles="width: 120px; margin: 0px; padding: 0px"
+                    ) +
+                    "</div>"
+                )
             if st.button("Read", key=f"inspect_{material['title']}", use_container_width=True):
                 show_material_details(material)
             if st.button(":star2: Summarize", key=f"summarize_{material['title']}", type='primary', use_container_width=True):
@@ -88,15 +93,7 @@ def show_chat():
         for message in st.session_state.messages:
             avatar = "img/athena.jpg" if message.type == "ai" else None
             st.chat_message(message.type, avatar=avatar).write(message.content)
-
-    # Display "Continue" button or chat input based on prologue completion
-    if not st.session_state.prologue_complete:
-        col1, col2, col3 = st.columns([2, 1, 2])
-        with col2:
-            if st.button("Continue", key="continue_prologue", type='primary', use_container_width=True):
-                st.session_state.prologue_complete = prologue_sequence()
-                st.rerun()
-    else:
+    if st.session_state.prologue_complete:
         prompt = st.chat_input("", key="chat_input")
         if prompt:
             add_message("human", prompt)
@@ -137,3 +134,19 @@ if authorized():
             # 🌟
             st.html("<div style='text-align: center; font-weight: bold; font-size: 16pt; margin-top: 0em; margin-bottom: 0em; padding: 0px'>Athena</div>")
         show_chat()
+        # Display "Continue" button or chat input based on prologue completion
+        if not st.session_state.prologue_complete:
+            col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+            with col2:
+                if st.button("Continue", key="continue_prologue", type='primary', use_container_width=True):
+                    st.session_state.prologue_complete = prologue_sequence()
+                    st.rerun()
+            with col3:
+                if st.button("Skip", key="skip_prologue", type='secondary', use_container_width=True):
+                    unlock_feature("show_timer")
+                    unlock_feature("show_vote")
+                    unlock_feature("show_materials")
+                    unlock_feature("show_notes")
+                    unlock_feature("show_commands")
+                    st.session_state.prologue_complete = True
+                    st.rerun()
